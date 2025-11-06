@@ -20,7 +20,7 @@ class EmailSender:
         • to_emails (list of str): список e-mail получателей.
 
     Методы:
-        • send_mail (subject_letter: str, message_text: str, file_path: Optional[str] = None): асинхронный метод отправки электронного письма.
+        • send_mail (subject_letter: str, message_text: str, file_path: Optional[str] = None): отправка письма.
 
    Примечание:
        Для повышения безопасности рекомендуется хранить учетные данные и адреса
@@ -34,9 +34,11 @@ class EmailSender:
         """
         Инициализация объекта класса `EmailSender`.
 
-        :param from_email: e-mail отправителя. По умолчанию берется из переменной окружения `FROM_EMAIL`.
-        :param password: пароль от аккаунта отправителя. По умолчанию берется из переменной окружения `EMAIL_PASSWORD`.
-        :param to_emails: список адресов получателей в формате JSON-списка. Если параметр не задан — значение берётся из переменной окружения `TO_EMAILS`.
+        :param from_email: e-mail отправителя.
+        :param password: пароль от аккаунта отправителя.
+        :param to_emails: список адресов получателей в формате JSON-списка.
+
+        Если аргумент отсутствует, берется значение из переменных среды окружения.
         """
         self.from_email = from_email or os.getenv('FROM_EMAIL')
         self.password = password or os.getenv('EMAIL_PASSWORD')
