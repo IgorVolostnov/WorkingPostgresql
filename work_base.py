@@ -178,3 +178,47 @@ class PostgresBase:
                 conn.commit()
         except psycopg2.Error as e:
             asyncio.run(self._send_email("PostgresBase", "rename_table", str(e)))
+
+    def delete_table(self, name_table: str):
+        """
+        Удаляет таблицу из базы данных.
+
+        :param name_table: имя таблицы для удаления из базы данных.
+        """
+        query = f"""
+        DELETE FROM {name_table};
+        """
+        try:
+            with psycopg2.connect(user=self.user_base,
+                                  password=self.password_base,
+                                  host=self.host_base,
+                                  port=self.port_base,
+                                  database=self.name_database) as conn:
+                cur = conn.cursor()
+                cur.execute(query)
+                conn.commit()
+        except psycopg2.Error as e:
+            asyncio.run(self._send_email("PostgresBase", "delete_table", str(e)))
+
+    def update_all_row_field_table(self, name_table: str, name_field: str, value_field: str):
+        """
+        Обновляет значение поля по всем записям таблицы.
+
+        :param name_table: имя таблицы для обновления.
+        :param name_field: имя поля, все значения которого необходимо обновить.
+        :param value_field: значение, которое примут все записи таблицы по заданному полю.
+        """
+        query = f"""
+        UPDATE {name_table} SET {name_field} = '{value_field}';
+        """
+        try:
+            with psycopg2.connect(user=self.user_base,
+                                  password=self.password_base,
+                                  host=self.host_base,
+                                  port=self.port_base,
+                                  database=self.name_database) as conn:
+                cur = conn.cursor()
+                cur.execute(query)
+                conn.commit()
+        except psycopg2.Error as e:
+            asyncio.run(self._send_email("PostgresBase", "update_all_row_field_table", str(e)))
